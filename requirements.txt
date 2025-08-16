@@ -3,12 +3,12 @@ Werkzeug==2.2.3
 tensorflow==2.20.0
 keras==2.15.0
 opencv-python==3.4.0.14
-gunicorn
-numpy>=1.23
-opencv-python-headless
-Pillow
+gunicorn==20.1.0
+numpy==1.24.3
+opencv-python-headless==4.7.0.72
+Pillow==9.5.0
+psutil==5.9.5
 
-psutil
 
 
 
