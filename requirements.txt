@@ -1,4 +1,3 @@
---upgrade pip
 Flask==2.2.5
 Werkzeug==2.2.3
 tensorflow==2.20.0
@@ -10,6 +9,7 @@ opencv-python-headless
 Pillow
 
 psutil
+
 
 
 
