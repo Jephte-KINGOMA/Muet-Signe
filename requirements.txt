@@ -2,10 +2,11 @@ Flask==2.2.5
 Werkzeug==2.2.3
 tensorflow==2.20.0
 keras==2.15.0
-opencv-python==4.12.0
+opencv-python==3.4.0.14
 gunicorn
 numpy>=1.23
 opencv-python-headless
 Pillow
 
 psutil
+
