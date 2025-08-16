@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Application de Prédiction Signes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h1 class="text-center mb-4">Prédiction des Signes Muet</h1>
+    <form method="POST" enctype="multipart/form-data" id="mainForm">
+      <div class="row g-3">
+        <!-- IMAGE -->
+        <div class="col-12 col-md-6">
+          <div class="card container-box p-2">
+            {% if image_url %}
+              <img src="{{ image_url }}"
+                   style="width:100%; height:100%; object-fit:contain;"
+                   alt="Image"/>
+            {% else %}
+              <div class="placeholder-image d-flex align-items-center justify-content-center">
+                Sélectionnez une image
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- TEXTE RÉSULTAT -->
+        <div class="col-12 col-md-6">
+          <div class="card container-box p-2">
+            <textarea id="resultText" name="result_text"
+                      class="form-control h-100" readonly
+                      placeholder="Résultat…">{{ result_text }}</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAMP CACHÉ POUR MEMORISER L’IMAGE (id en mémoire côté serveur) -->
+      {% if image_id %}
+      <input type="hidden" name="image_id" value="{{ image_id }}">
+      {% endif %}
+
+      <!-- BOUTONS -->
+      <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+        <label class="btn btn-outline-primary flex-fill">
+          Parcourir
+          <input type="file" name="user_image"
+                 accept="image/*" hidden onchange="this.form.submit()">
+        </label>
+        <button type="submit" name="predict"
+                class="btn btn-primary flex-fill" id="predictBtn">Prédire</button>
+        <button type="button" class="btn btn-success flex-fill"
+                onclick="speak()">Parler</button>
+        <button type="button" class="btn btn-secondary flex-fill"
+                onclick="resetForm()">Effacer</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Overlay spinner (initialement caché) -->
+  <div id="overlay" class="overlay hidden">
+    <div class="text-center">
+      <div class="spinner-border" role="status" style="width:4rem;height:4rem;">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <div class="mt-2">Prédiction en cours...</div>
+    </div>
+  </div>
+
+  <!-- Synthèse vocale automatique -->
+  {% if result_text %}
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const msg = new SpeechSynthesisUtterance(
+        document.getElementById('resultText').value
+      );
+      speechSynthesis.speak(msg);
+    });
+  </script>
+  {% endif %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // affiche overlay lors du clic sur "Prédire"
+    document.addEventListener('DOMContentLoaded', () => {
+      const predictBtn = document.getElementById('predictBtn');
+      const overlay = document.getElementById('overlay');
+
+      if (predictBtn) {
+        predictBtn.addEventListener('click', (e) => {
+          overlay.classList.remove('hidden');
+        });
+      }
+    });
+
+    function speak() {
+      const text = document.getElementById('resultText').value;
+      if (text && text.trim() !== '') {
+        speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+      }
+    }
+    function resetForm() {
+      window.location.href = window.location.pathname;
+    }
+  </script>
+</body>
+</html>
